@@ -22,7 +22,7 @@ exports.findAll = async (req, res) =>{
     } catch(err) {
         console.log("Error while fetching the users filtered users", err.message);
         res.status(500).send({
-            message : "Internal server error"
+            message : "Internal server error 1"
         });
     }
 }
@@ -30,14 +30,14 @@ exports.findAll = async (req, res) =>{
 exports.findByUserId = async (req, res) => {
 
     try {
-        const user = await User.find({ userId: req.params.id });
         
-        return res.status(200).send(objectConverter.filterUserResponse(user));
+        const user = await User.find({ userId: req.params.id });
+        return res.status(200).send(user);
 
     } catch (err) {
         console.log("Error while searching the user ", err);
         return res.status(500).send({
-            message: "Internal Server Error"
+            message: "Internal Server Error 2"
         })
     }
 }
@@ -63,7 +63,7 @@ exports.update = async (req, res) => {
     } catch (err) {
         console.log("Error while DB operation", err.message);
         res.status(500).send({
-            message: "Internal server error"
+            message: "Internal server error 3"
         })
     }
 }

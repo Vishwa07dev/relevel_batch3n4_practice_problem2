@@ -29,7 +29,7 @@ const orderSchema = new mongoose.Schema(
         },
         totalCost : {
             type : Number,
-            required : true
+            default : 0        //admin will update the both the totalCost and status accordingly
         },
         status : {
             type : String,

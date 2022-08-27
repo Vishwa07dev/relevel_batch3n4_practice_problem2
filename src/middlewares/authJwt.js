@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../configs/auth.config');
 const User = require('../models/user.model');
+const Order = require('../models/order.model');
 const constants = require('../utils/constants');
 
 const verifyToken = (req, res, next) => {
 
-// console.log(authConfig.tokenHeader, ": ---tokenheader")
+
     const token = req.headers[authConfig.tokenHeader];
 
     if(!token) {
@@ -23,7 +24,7 @@ const verifyToken = (req, res, next) => {
 
         const user = await User.findOne({ userId : decoded.id });
         req.user = user
-        //console.log("token -next", req.params.id);
+
         next();
     })
 
@@ -33,6 +34,7 @@ const isAdmin = async (req, res, next) => {
     try {
 
         if(req.user && req.user.userType == constants.userTypes.admin){
+
             next();
         } else{
             res.status(403).send({
@@ -50,12 +52,15 @@ const isAdmin = async (req, res, next) => {
 
 const isValidUserIdInReqParam = async (req, res, next) => {
     try {
-        const user = User.find({ userId: req.params.id });
+        const user = User.findOne({ userId: req.params.id });
         if (!user) {
             return res.status(400).send({
                 message: "UserId passed doesn't exist"
             })
         }
+        
+        req.paramUser = user;
+       
         next();
     } catch (err) { 
         console.log("Error :", err.message);
@@ -66,24 +71,67 @@ const isValidUserIdInReqParam = async (req, res, next) => {
     }
 }
 
-
+const isValidOrderIdInReqParam = async (req, res, next) => {
+    try {
+        const order = Order.findOne({ "_id": req.params.id });
+        if (!order) {
+            return res.status(400).send({
+                message: "orderId passed doesn't exist"
+            })
+          
+        }
+        req.paramOrder = order;
+       
+        next();
+    } catch (err) { 
+        console.log("Error :", err.message);
+        
+        return res.status(500).send({
+            message: "Internal server error "
+        });
+    }
+}
 
 const isAdminOrOwner = async (req, res, next) => {
 
 
     try {
-        const callingUser = req.user  //req.userId was got from verifyToken middleware 
-        if (callingUser.userType == constants.userTypes.admin || callingUser.userId == req.params.id) {
+       
+        if(req.paramUser){
 
-            if(callingUser.userType == constants.userTypes.admin){
-                req.isAdmin = true;
+            const callingUser = req.user  //req.userId was got from verifyToken middleware 
+            if (callingUser.userType == constants.userTypes.admin || callingUser.userId == req.params.id) {
+      
+                if(callingUser.userType == constants.userTypes.admin){
+                    req.isAdmin = true;
+                }
+                console.log("req.paus");
+                next();
+            } else {
+                res.status(403).send({
+                    message: "Only admin or the owner is allowed to make this call"
+                })
             }
-            next();
-        } else {
-            res.status(403).send({
-                message: "Only admin or the owner is allowed to make this call"
-            })
+        } else if(req.paramOrder){
+
+
+            const order = req.paramOrder;
+            const callingUser = req.user;
+
+            if (callingUser.userType == constants.userTypes.admin || callingUser.id == order.orderedBy) {
+
+                if(callingUser.userType == constants.userTypes.admin){
+                    req.isAdmin = true;
+                }
+                //console.log("reqpaor");
+                next();
+            } else {
+                res.status(403).send({
+                    message: "Only admin or the owner is allowed to make this call"
+                })
+            }
         }
+
 
 
     } catch (err) {
@@ -99,6 +147,7 @@ const authJwt = {
     verifyToken : verifyToken,
     isAdmin : isAdmin,
     isValidUserIdInReqParam : isValidUserIdInReqParam,
+    isValidOrderIdInReqParam : isValidOrderIdInReqParam,
     isAdminOrOwner : isAdminOrOwner
 };
 

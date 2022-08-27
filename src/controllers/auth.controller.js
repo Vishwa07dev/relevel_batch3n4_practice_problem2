@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const authConfig = require("../configs/auth.config")
-const constants = require("../utils/constants");
 
 
 exports.signup = async (req, res)=>{
@@ -49,11 +48,6 @@ exports.signin = async (req, res) => {
         if(user == null){
             return res.status(400).send({
                 message : "Failed to login. UserId passed is't correct"
-            })
-        }
-        if(user.userStatus == constants.userStatuses.pending){
-            return res.status(400).send({
-                message : "Not yet approved by the Admin"
             })
         }
 

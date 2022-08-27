@@ -13,6 +13,18 @@ const vadlidationOfOrderBody = async (req, res, next) => {
             });
         }
 
+        if(req.body.status) {
+            return res.status(400).send({
+                message : "Failed ! status can be givenupdated only by a admin"
+            })
+        }
+
+        if(req.body.totalCost) {
+            return res.status(400).send({
+                message : "Failed ! totalCost is given/updated by only the admin"
+            })
+        }
+
         next();
     } catch (err) {
         console.log("error while validating company body ", err.message);
