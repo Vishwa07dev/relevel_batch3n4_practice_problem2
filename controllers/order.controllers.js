@@ -98,29 +98,10 @@ exports.cancelOrder=async (req,res)=>{
 }
 
 exports.findAll=async (req,res)=>{
-    
-
-        const queryObj={}
-        const userIdQP=req.body.userId;
-        const userTypeQP=req.body.userType;
-        const userStatusQP=req.body.userStatus;
-
-        if(userTypeQP)
-        {
-            queryObj.userType=userTypeQP
-        }
-        if(userStatusQP)
-        {
-            queryObj.userStatus=userStatusQP
-        }
-        if(userIdQP)
-        {
-            queryObj.userId=userIdQP
-        }
+        const queryObj=req.userId;
         try
         {
-
-            const orders=await Order.find(queryObj);
+            const orders=await Order.find({customerId:queryObj});
             res.status(200).send(objectConveter.orderResponse(orders))
         }
         catch(err)
@@ -130,5 +111,4 @@ exports.findAll=async (req,res)=>{
                 message:"Internal Server Error"
             })
         }
-    
 }

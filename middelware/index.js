@@ -1,5 +1,8 @@
-const verifyToken=require("./authvalidator");
-
+const authValidation=require("./authvalidator");
+const authSign=require("./signUp")
+const ordervalid=require("./orderValidator")
 module.exports={
-    verifyToken
+    authValidation,
+    authSign,
+    ordervalid
 }

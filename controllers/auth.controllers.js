@@ -3,7 +3,7 @@ const bcrypt=require("bcryptjs")
 const jwt=require("jsonwebtoken")
 const secret=require("../configs/secret.configs")
 
-exports.singUp=async (req,res)=>{
+exports.signUp=async (req,res)=>{
     
     const userObj={
         name:req.body.name,
@@ -35,7 +35,7 @@ exports.singUp=async (req,res)=>{
     }
 }   
 
-exports.singIn=async (req,res)=>{
+exports.signIn=async (req,res)=>{
   try{
     const user=await User.findOne({userId:req.body.userId});
     if(user==null)

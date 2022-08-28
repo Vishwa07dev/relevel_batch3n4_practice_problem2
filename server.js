@@ -29,6 +29,7 @@ async function init()
     try{
         await User.collection.drop();
         await Order.collection.drop();
+
         const user=await User.create({
             name:"sandeep",
             userId:"sam",
@@ -45,6 +46,7 @@ async function init()
 }
 require("./routes/auth.routes")(app);
 require("./routes/order.routes")(app);
+
 app.listen(serverConfig.PORT,()=>{
     console.log("Server is connected...",serverConfig.PORT)
 })
