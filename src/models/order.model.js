@@ -21,6 +21,7 @@ const orderSchema = new mongoose.Schema(
         },
         deliveryDate : {
             type : String,
+            required : true,
             default : "With in 48 hours :) ....!"
         },
         address : {
