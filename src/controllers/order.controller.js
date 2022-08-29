@@ -26,6 +26,23 @@ exports.createOrder = async (req, res) => {
     }
 }
 
+exports.getAllOrders = async (req, res) => {
+
+    try {
+
+        const orders = await Order.find();
+
+        res.status(200).send(orders);
+    } catch (err) {
+
+        console.log("some error while fetching all orders", err.message);
+        res.status(500).send({
+            message : "Some internal error "
+        });
+    }
+
+}
+
 exports.getAllMyOrders = async (req, res) => {
 
     try {
@@ -70,22 +87,6 @@ exports.findByOrderId = async (req, res) => {
     }
 }
 
-exports.getAllOrders = async (req, res) => {
-
-    try {
-
-        const orders = await Order.find();
-
-        res.status(200).send(orders);
-    } catch (err) {
-
-        console.log("some error while fetching all orders", err.message);
-        res.status(500).send({
-            message : "Some internal error "
-        });
-    }
-    
-}
 
 
 exports.updateOrder = async (req, res) => {
@@ -93,12 +94,12 @@ exports.updateOrder = async (req, res) => {
         const order = await Order.findOne({"_id": req.params.id});
 
         order.item = req.body.item != undefined ? req.body.item : order.item;
+        order.status = req.body.status != undefined ? req.body.status : order.status;
         if(isAdmin){
-            order.status = req.body.status != undefined ? req.body.status : order.status;
             order.totalCost = req.body.totalCost != undefined ? req.body.totalCost : order.totalCost;
             order.deliveryDate = req.body.deliveryDate != undefined ? req.body.deliveryDate : order.deliveryDate;
         }
-        order.address = req.body.address != undefined ? req.body.status : order.address;
+        order.address = req.body.address != undefined ? req.body.address : order.address;
         
         const updatedOrder = await order.save();
 

@@ -27,7 +27,7 @@ const vadlidationOfOrderBody = async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.log("error while validating company body ", err.message);
+        console.log("error while validating order body ", err.message);
         res.status(500).send({
             message : "Internal server error"
         });
