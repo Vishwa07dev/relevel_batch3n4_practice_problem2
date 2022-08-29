@@ -9,13 +9,13 @@ const vadlidationOfOrderBody = async (req, res, next) => {
         }
         if (!req.body.address) {
             return res.status(400).send({
-                message: "Failed ! company address is not provided"
+                message: "Failed ! order address is not provided"
             });
         }
 
         if(req.body.status) {
             return res.status(400).send({
-                message : "Failed ! status can be givenupdated only by a admin"
+                message : "Failed ! status can be given/updated only by a admin"
             })
         }
 
