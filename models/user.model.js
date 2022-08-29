@@ -33,9 +33,9 @@ const userSchema = new mongoose.Schema(
       default: constants.userType.customer,
       enum: [constants.userType.admin, constants.userType.customer]
     },
-    ordersCreated :{
-        type : [mongoose.SchemaType.ObjectId],
-        ref : "Order"
+    ordersCreated: {
+      type: [mongoose.SchemaType.ObjectId],
+      ref: "Order"
     }
   },
   { timestamps: true, versionKey: false }

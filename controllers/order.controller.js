@@ -55,21 +55,21 @@ exports.getAllOrders = async (req, res) => {
 }
 
 
-exports.cancle = async (req, res) => {
-    try{
-        const order = await Order.findOne({_id : req.params.id})
-        order.status = constants.orderStatus.calcelled;
-        order.save()
+// exports.cancle = async (req, res) => {
+//     try{
+//         const order = await Order.findOne({_id : req.params.id})
+//         order.status = constants.orderStatus.calcelled;
+//         order.save()
 
-        res.status(200).send({
-            message : "Successfully calcelled the order"
-        })
+//         res.status(200).send({
+//             message : "Successfully calcelled the order"
+//         })
 
-    }catch(err){
-        console.log("error in cancling order");
-        res.status(500).send("Internal Server Error")
-    }
-}
+//     }catch(err){
+//         console.log("error in cancling order");
+//         res.status(500).send("Internal Server Error")
+//     }
+// }
 
 exports.update = async (req, res) => {
     try{
@@ -80,11 +80,11 @@ exports.update = async (req, res) => {
         if(user.userType == constants.userType.admin){
 
             order.deliveryDate = req.body.deliveryDate != undefined ? req.body.deliveryDate : order.deliveryDate;
-            order.status = req.body.status != undefined ? req.body.status : order.status;
             order.totalCost = req.body.totalCost != undefined ? req.body.totalCost : order.totalCost;
             order.items = req.body.items != undefined ? req.body.items : order.items;
         }
-
+        
+        order.status = req.body.status != undefined ? req.body.status : order.status;
         order.address = req.body.address != undefined ? req.body.address : order.address
 
         const updatedOrder = await order.save()

@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
         trim: true,
     },
     items : {
-        type : String,
+        type : [String],
         required : true
     },
 
