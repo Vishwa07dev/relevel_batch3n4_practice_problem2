@@ -13,7 +13,7 @@ const verifyToken = async (req,res,next)=>{
         })
     }
 
-    jwt.verify(token, authConfig.secret, (err, decoded)=>{
+    jwt.verify(token, authConfig.secret, async (err, decoded)=>{
         if(err){
             return res.status(401).send({
                 message : "UnAuthorised!"
