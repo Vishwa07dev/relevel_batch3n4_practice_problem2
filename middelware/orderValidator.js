@@ -2,7 +2,12 @@ const Order=require("../models/order.models")
 const constants=require("../utils/constant.util")
 
 const orderValidation=(req,res,next)=>{
-    
+    if(!req.body.orderId ||req.body.orderId==" ")
+    {
+        return res.status(400).send({
+            message:"Failed!!! orderId is not Provided"
+        })
+    }
     if(!req.body.deliverydate||req.body.deliverydate==" ")
     {
         return res.status(400).send({

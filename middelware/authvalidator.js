@@ -25,16 +25,26 @@ const verifyToken=async (req,res,next)=>{
         next();
     });
 }
+const isValiduserId=async (req,res,next)=>{
+    try
+    {
+            const user=await User.find({userId:req.params.id});
+            if(!user)
+            {
+                return res.status(400).send({
+                    message:"Failed!!! User doesn't Exist"
+                })
+            }
+    }catch(err)
+    {
+        return res.status(500).send({
+            message:"Internal Server Error"
+        })
+    }
+    next();
+}
 const isAdminorOwner=async (req,res,next)=>{
-    // const user=User.findOne({userId:req.params.id});
-    // const order=Order.findOne({customerId:req.params.id})
-    // if(user.userId!=order.customerId)
-    // {
-    //     return res.status(400).send({
-    //         message:"User is not Owner"
-    //     })
-    // }
-
+    
     try{
         const user=await User.findOne({userId:req.userId});
         if(user.userType==constants.userType.admin||user.userId==req.params.id)
@@ -58,7 +68,8 @@ const isAdminorOwner=async (req,res,next)=>{
 }
 const authJwt={
     verifyToken,
-    isAdminorOwner
+    isAdminorOwner,
+    isValiduserId
 }
 
 module.exports=authJwt

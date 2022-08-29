@@ -5,6 +5,12 @@ const orderSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    orderId:{
+        type:String,
+        required:true,
+        lowercase:true,
+        unique:true
+    },
     deliverydate:{
         type:String,
         required:true

@@ -3,7 +3,7 @@ const Order=require("../models/order.models")
 const objectConveter=require("../utils/objectConverter")
 exports.placeOrder=async (req,res)=>{
     const order={
-      
+        orderId:req.body.orderId,
         deliverydate:req.body.deliverydate,
         status:req.body.status,
         items:req.body.items,
@@ -18,6 +18,7 @@ exports.placeOrder=async (req,res)=>{
         console.log("newOrder",newOrder)
         const response={
             customerId:newOrder.customerId,
+            orderId:newOrder.orderId,
             deliverydate:newOrder.deliverydate,
             status:newOrder.status,
             items:newOrder.items,
@@ -31,35 +32,30 @@ exports.placeOrder=async (req,res)=>{
     }
     catch(err)
     {
-        consoel.log("Error",err.message)
+        console.log("Error",err.message)
         res.status(500).send({
             message:"Internal Server Error"
         });
     }
-
-
 }
 
 exports.updateOrder=async (req,res)=>{
     try{
         const order=await Order.findOne({companyId:req.params.id});
-    order.deliverydate=req.body.deliverydate!=undefined?req.body.deliverydate:order.deliverydate;
-    order.items=req.body.items!=undefined?req.body.items:order.items;
-    order.address=req.body.address!=undefined?req.body.address:order.address;
-    order.totalCost=req.body.totalCost!=undefined?req.body.totalCost:order.totalCost;
-
-    const updateOrder=await order.save();
-
-    const response={
-        customerId:updateOrder.customerId,
-        deliverydate:updateOrder.deliverydate,
-        items:updateOrder.items,
-        totalCost:updateOrder.totalCost,
-        address:updateOrder.address,
-        status:cancelOrder.status
-    }
-    res.status(200).send(response);
-
+        order.deliverydate=req.body.deliverydate!=undefined?req.body.deliverydate:order.deliverydate;
+        order.items=req.body.items!=undefined?req.body.items:order.items;
+        order.address=req.body.address!=undefined?req.body.address:order.address;
+        order.totalCost=req.body.totalCost!=undefined?req.body.totalCost:order.totalCost;
+        const updateOrder=await order.save();
+        const response={
+            customerId:updateOrder.customerId,
+            deliverydate:updateOrder.deliverydate,
+            items:updateOrder.items,
+            totalCost:updateOrder.totalCost,
+            address:updateOrder.address,
+            status:cancelOrder.status
+        }
+        res.status(200).send(response);
     }
     catch(err)
     {
@@ -73,9 +69,8 @@ exports.updateOrder=async (req,res)=>{
 exports.cancelOrder=async (req,res)=>{
     try
     {
-        const order=await Order.findOne({companyId:req.params.id})
+        const order=await Order.findOne({customerId:req.params.id})
         order.status=order.status!=undefined?req.body.status:order.status;
-
         const cancelOrder=await order.save();
         const response={
             companyId:cancelOrder.customerId,
