@@ -48,7 +48,9 @@ const isValidOwnerOfTheOrder = async (req,res,next) =>{
 
     if (user.userType != constants.userType.admin){
         const ownerId = order.customerId;
-        if (user._id != ownerId){
+        console.log(ownerId);
+        console.log(user._id);
+        if (ownerId != user._id){
             return res.status(401).send({
                 message : "only ADMIN and OWNER are allowed"
             });
@@ -73,6 +75,8 @@ const validateUpdateOrderBody = async (req,res,next)=>{
             message : "Invalid order status provided"
         });
     }
+
+    next();
 
 }
 

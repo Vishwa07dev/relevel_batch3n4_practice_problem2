@@ -8,7 +8,7 @@ exports.createOrder = async (req,res)=>{
             items : req.body.items,
             totalCost : req.body.totalCost,
             address : req.body.address,
-            deliveryDate : req.body.date
+            deliveryDate : req.body.deliveryDate
         }
     
         const orderCreated = await Order.create(orderObj);
@@ -44,7 +44,7 @@ exports.getAllOrders = async (req,res)=>{
                 });
             }
 
-            queryObj["_id"] = {$in : ordersCreated};
+            queryObj["_id"] = {$in : req.user.ordersCreated};
 
         }
     
@@ -70,7 +70,7 @@ exports.updateOrder = async (req,res)=>{
         order.deliveryDate = req.body.deliveryDate != undefined? req.body.deliveryDate : order.deliveryDate;
         order.status = req.body.status != undefined? req.body.stauts : order.status;
     
-        const updatedOrder = await Order.save()
+        const updatedOrder = await order.save()
         res.status(200).send(updatedOrder)
     }catch(err){
         console.log("#### Error while updating order ####", err);
