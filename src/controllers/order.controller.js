@@ -36,7 +36,13 @@ exports.getAllMyOrders = async (req, res) => {
     
         const orders = await Order.find(queryObj);
     
-        res.status(200).send(orders)
+        if(orders){
+            res.status(200).send(orders);
+        } else {
+            res.status(200).send({
+                message : "No orders yet ! Hurry up"
+            })
+        }
     
         
     } catch (err) {

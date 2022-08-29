@@ -21,7 +21,7 @@ const orderSchema = new mongoose.Schema(
         },
         deliveryDate : {
             type : String,
-            default : "With in 24 hours ....!"
+            default : "With in 48 hours :) ....!"
         },
         address : {
             type : String,
@@ -29,7 +29,7 @@ const orderSchema = new mongoose.Schema(
         },
         totalCost : {
             type : Number,
-            default : 0        //admin will update the both the totalCost and status accordingly
+            default : 2500       //admin will update both the totalCost and status accordingly
         },
         status : {
             type : String,
