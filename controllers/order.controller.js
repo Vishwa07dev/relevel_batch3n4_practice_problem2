@@ -34,39 +34,32 @@ exports.placeOrder = async (req, res) => {
 
 };
 
-exports.updateOrder = async (req, res) => {
+    
+exports.cancelAndUpdateOrder = async (req, res) => {   
     try{
         const order = await Order.findOne({_id : req.params.id});
-    
-        order.item = req.body.item ? req.body.item : order.item;
-        order.totalCost = req.body.totalCost ? req.body.totalCost : order.totalCost;
-        order.address = req.body.address ? req.body.address : order.address;
-        order.deliveryDate = req.body.deliveryDate ? req.body.deliveryDate : order.deliveryDate;
-    
-        const updatedOrder = await order.save();
-        return res.status(200).send(updatedOrder);
-    }
-    catch(err){
-        return res.status(500).send({
-            message : `Internal server error while updating an order : ${err}`
-        }) 
-    }
-};
 
-exports.cancelOrder = async (req, res) => {
-    try{
-        const order = await Order.findOne({_id : req.params.id});
-    
-        order.orderStatus = constants.orderStatus.cancelled;
-        await order.save();
-    
-        return res.status(200).send({
-            message : `Your order ${req.params.id} has been cancelled succefully.`
-        });
+        if(req.body.orderStatus === constants.orderStatus.cancelled){
+            order.item = req.body.item ? req.body.item : order.item;
+            order.totalCost = req.body.totalCost ? req.body.totalCost : order.totalCost;
+            order.address = req.body.address ? req.body.address : order.address;
+            order.deliveryDate = req.body.deliveryDate ? req.body.deliveryDate : order.deliveryDate;
+        
+            const updatedOrder = await order.save();
+            return res.status(200).send(updatedOrder);
+        }
+        else{
+            order.orderStatus = constants.orderStatus.cancelled;
+            await order.save();
+        
+            return res.status(200).send({
+                message : `Your order ${req.params.id} has been cancelled succefully.`
+            });
+        }
     }
     catch(err){
         return res.status(500).send({
-            message : `Internal server error while placing an order : ${err}`
+            message : `Internal server error while updating/cancelling an order : ${err}`
         }) 
     }
 };
