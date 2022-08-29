@@ -15,7 +15,7 @@ exports.placeOrder = async (req, res) => {
         const placedOrder = await Order.create(orderObj);
         if(placedOrder){
             const user = await User.findOne({userId : placedOrder.userId});
-            user.orders.push(placedOrder.userId);
+            user.orders.push(placedOrder._id);
             await user.save();
         }
     
