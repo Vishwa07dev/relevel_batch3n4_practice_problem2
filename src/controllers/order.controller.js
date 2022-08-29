@@ -30,7 +30,27 @@ exports.getAllOrders = async (req, res) => {
 
     try {
 
-        const orders = await Order.find();
+        if(isAdmin){
+            const queryObj = {};
+            const ordersCreated = req.user.ordersCreated
+            console.log("ordersCreated", ordersCreated)
+            queryObj["_id"] = { $in: ordersCreated};
+        
+            let orders = await Order.find(queryObj);
+            orders = await Order.find();
+            console.log("orders", orders);
+            res.status(200) .send({
+                oredersCreated : {
+                    ordersCreated
+                },
+                allOrders : {
+                    orders
+                }
+            }) 
+        } else {
+            const orders = await Order.find();
+            res.status(200).send(orders);
+        }
 
         res.status(200).send(orders);
     } catch (err) {
@@ -43,34 +63,6 @@ exports.getAllOrders = async (req, res) => {
 
 }
 
-exports.getAllMyOrders = async (req, res) => {
-
-    try {
-
-        const queryObj = {};
-        const ordersCreated = req.user.ordersCreated
-        queryObj["_id"] = { $in: ordersCreated};
-    
-        const orders = await Order.find(queryObj);
-    
-        if(orders){
-            res.status(200).send(orders);
-        } else {
-            res.status(200).send({
-                message : "No orders yet ! Hurry up"
-            })
-        }
-    
-        
-    } catch (err) {
-
-        console.log("some error while getting all your orders", err.message);
-        res.status(500).send({
-            message : "Some internal error "
-        });
-    }
-    
-}
 
 exports.findByOrderId = async (req, res) => {
 

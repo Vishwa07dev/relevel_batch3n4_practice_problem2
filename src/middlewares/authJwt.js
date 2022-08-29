@@ -123,7 +123,23 @@ const isAdminOrOwner = async (req, res, next) => {
                 if(callingUser.userType == constants.userTypes.admin){
                     req.isAdmin = true;
                 }
-                //console.log("reqpaor");
+                
+                next();
+            } else {
+                res.status(403).send({
+                    message: "Only admin or the owner is allowed to make this call"
+                })
+            }
+        } else {
+
+            const callingUser = req.user;
+            
+            if (callingUser.userType == constants.userTypes.admin || callingUser.id == order.orderedBy) {
+
+                if(callingUser.userType == constants.userTypes.admin){
+                    req.isAdmin = true;
+                }
+                
                 next();
             } else {
                 res.status(403).send({

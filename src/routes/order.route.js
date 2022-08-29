@@ -6,9 +6,7 @@ module.exports = (app) => {
 
     app.post("/orderService/api/v1/orders", [authJwt.verifyToken, ordervalidator.vadlidationOfOrderBody], orderController.createOrder);
 
-    app.get("/orderService/api/v1/order", [authJwt.verifyToken, authJwt.isAdminOrOwner], orderController.getAllMyOrders);
-
-    app.get("/orderService/api/v1/orders", [authJwt.verifyToken, authJwt.isAdmin,], orderController.getAllOrders);
+    app.get("/orderService/api/v1/orders", [authJwt.verifyToken, authJwt.isAdminOrOwner], orderController.getAllOrders);
 
     app.get("/orderService/api/v1/order/:id", [authJwt.verifyToken, authJwt.isValidOrderIdInReqParam, authJwt.isAdminOrOwner], orderController.findByOrderId);
 
