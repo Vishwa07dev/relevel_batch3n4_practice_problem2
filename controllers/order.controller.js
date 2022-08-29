@@ -40,6 +40,14 @@ exports.cancelAndUpdateOrder = async (req, res) => {
         const order = await Order.findOne({_id : req.params.id});
 
         if(req.body.orderStatus === constants.orderStatus.cancelled){
+            order.orderStatus = constants.orderStatus.cancelled;
+            await order.save();
+        
+            return res.status(200).send({
+                message : `Your order ${req.params.id} has been cancelled succefully.`
+            });
+        }
+        else{
             order.item = req.body.item ? req.body.item : order.item;
             order.totalCost = req.body.totalCost ? req.body.totalCost : order.totalCost;
             order.address = req.body.address ? req.body.address : order.address;
@@ -47,14 +55,6 @@ exports.cancelAndUpdateOrder = async (req, res) => {
         
             const updatedOrder = await order.save();
             return res.status(200).send(updatedOrder);
-        }
-        else{
-            order.orderStatus = constants.orderStatus.cancelled;
-            await order.save();
-        
-            return res.status(200).send({
-                message : `Your order ${req.params.id} has been cancelled succefully.`
-            });
         }
     }
     catch(err){
