@@ -95,10 +95,15 @@ exports.getAllOrders = async (req, res) => {
     try{
         const callingUser = await User.findOne({userId : req.userId});
     
-        const orders = await Order.find({});
-        if (callingUser.userType === constants.userTypes.customer){
-            orders = await Order.find({customerId : callingUser.userId}); 
-        }
+        // const orders = await Order.find({});
+        // if (callingUser.userType === constants.userTypes.customer){
+        //     orders = await Order.find({customerId : callingUser.userId}); 
+        // }
+
+        const orders = callingUser.userType === constants.userTypes.customer
+            ? await Order.find({customerId : callingUser.userId})
+            : await Order.find({});
+        
     
         if(!orders){
             return res.status(404).send({
