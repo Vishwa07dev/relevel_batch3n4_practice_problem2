@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        default: constants.orderStatus.success,
+        default: constants.orderStatus.in_progress,
         enum: [constants.orderStatus.calcelled, constants.orderStatus.success, constants.orderStatus.in_progress]
     },
     totalCost: {
