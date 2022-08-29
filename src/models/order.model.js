@@ -16,7 +16,7 @@ const { orderStatuses } = require("../utils/constants");
 const orderSchema = new mongoose.Schema(
     {
         item : {
-            type : String,
+            type : [String],
             required : true
         },
         deliveryDate : {
