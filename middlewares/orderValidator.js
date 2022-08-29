@@ -11,7 +11,7 @@ const validateNewOrderBody = async (req,res,next)=>{
 
     if (!req.body.items) {
         return res.status(400).send({
-            message: "Failed ! order itesms are not provided"
+            message: "Failed ! order items are not provided"
         });
     }
 

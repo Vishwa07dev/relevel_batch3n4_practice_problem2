@@ -27,9 +27,7 @@ const verifyToken = async (req,res,next)=>{
 
 const isAdmin = (req,res,next)=>{
 
-    const user = req.user
-
-    if (user && user.userType == constants.userType.admin){
+    if (req.user && req.user.userType == constants.userType.admin){
         next();
     }else{
         return res.status(403).send({
@@ -40,8 +38,7 @@ const isAdmin = (req,res,next)=>{
 
 const isAdminOrOwner = async (req,res,next)=>{
     try {
-        const callingUser = req.user;
-        if(callingUser.userType==constants.userType.admin || callingUser.userId == req.params.userId){
+        if(req.user.userType==constants.userType.admin || req.user.userId == req.params.userId){
             next();
         }else{
             return res.send(403).send({

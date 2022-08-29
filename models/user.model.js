@@ -22,15 +22,6 @@ const userSchema = new mongoose.Schema({
         minLength : 10,
         unique : true
     },
-    createdAt : {
-        type : Date,
-        immutable :true,
-        default : () => {return Date.now()}
-    },
-    updatedAt : {
-        type : Date,
-        default : () => {return Date.now()}
-    },
     userType : {
         type : String,
         required : true,
@@ -41,6 +32,15 @@ const userSchema = new mongoose.Schema({
         type : [mongoose.SchemaTypes.ObjectId],
         ref : "Order"
     },
+    createdAt : {
+        type : Date,
+        immutable :true,
+        default : () => {return Date.now()}
+    },
+    updatedAt : {
+        type : Date,
+        default : () => {return Date.now()}
+    }
 });
 
 module.exports = mongoose.model("User",userSchema);

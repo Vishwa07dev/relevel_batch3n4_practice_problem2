@@ -4,7 +4,7 @@ const constants = require("../utils/constants")
 exports.createOrder = async (req,res)=>{
     try{
         const orderObj = {
-            customerId : req.user._id,
+            customerId : req.user.userType == constants.userType.admin ? req.body.customerId : req.user._id,
             items : req.body.items,
             totalCost : req.body.totalCost,
             address : req.body.address,

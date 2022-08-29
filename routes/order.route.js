@@ -1,5 +1,5 @@
 const orderController = require('../controllers/order.controller');
-const {authJwt, verifyOrder, verifyBody} = require('../middlewares')
+const {authJwt, verifyOrder} = require('../middlewares')
 
 module.exports = (app)=>{
     app.post("/orderService/api/v1/orders/", [authJwt.verifyToken, verifyOrder.validateNewOrderBody], orderController.createOrder);
