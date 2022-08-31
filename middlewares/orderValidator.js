@@ -46,18 +46,14 @@ const isValidOwnerOfTheOrder = async (req,res,next) =>{
         });
     }
 
-    if (user.userType != constants.userType.admin){
-        const ownerId = order.customerId;
-        console.log(ownerId);
-        console.log(user._id);
-        if (ownerId != user._id){
-            return res.status(401).send({
-                message : "only ADMIN and OWNER are allowed"
-            });
-        }
+    if (user.userType == constants.userType.admin || order.customerId.equals(user._id)){
+        req.order = order
+        next();
+    }else{
+        return res.status(401).send({
+            message : "only ADMIN and OWNER are allowed"
+        });
     }
-    req.order = order
-    next();
 }
 
 const validateUpdateOrderBody = async (req,res,next)=>{
